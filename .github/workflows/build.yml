@@ -5,7 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: unzip -q ThumbGallery.zip
+        with:
+          fetch-depth: 0
+      - name: Unzip newest upload
+        run: |
+          f=$(git log -1 --format= --name-only --diff-filter=AM -- '*.zip' | head -n 1)
+          echo "Building from: $f"
+          unzip -q -o "$f"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
